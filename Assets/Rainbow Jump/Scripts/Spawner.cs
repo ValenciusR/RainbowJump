@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace RainbowJump.Scripts
 {
@@ -12,7 +13,9 @@ namespace RainbowJump.Scripts
         public float spawnInterval = 0.9f;
         private float timer = 0.0f;
 
+
         private static List<GameObject> spawnedObstacles = new List<GameObject>();
+        public List<Vector3> ObstaclesSpawnPos = new List<Vector3>();
 
         void Start()
         {
@@ -54,6 +57,8 @@ namespace RainbowJump.Scripts
             // Calculate the spawn position of the obstacle
             Vector3 spawnPosition = spawnPoint.position + Vector3.up * yOffset * spawnedObstacles.Count;
 
+            ObstaclesSpawnPos.Add(spawnPosition);
+
             // Instantiate the obstacle at the spawn position
             GameObject obstacle = Instantiate(obstaclePrefab, spawnPosition, Quaternion.identity);
 
@@ -72,6 +77,11 @@ namespace RainbowJump.Scripts
             }
 
             spawnedObstacles.Clear();
+        }
+
+        public List<Vector3> GetObstacleSpawned()
+        {
+            return ObstaclesSpawnPos;
         }
 
     }

@@ -258,6 +258,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1537912249}
+  - {fileID: 1896485051}
   m_Father: {fileID: 1482025453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -573,6 +574,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 614315582}
   yOffset: 4.5
   spawnInterval: 0.9
+  ObstaclesSpawnPos: []
 --- !u!1 &869681175
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,62 +707,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869681175}
   m_CullTransparentMesh: 1
---- !u!1 &1106021172 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2842413633422509964, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
-  m_PrefabInstance: {fileID: 7806229354487218818}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1106021177 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7265037922542937977, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
-  m_PrefabInstance: {fileID: 7806229354487218818}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1106021172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1106021178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1106021172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_StringReference:
-    m_TableReference:
-      m_TableCollectionName: GUID:3cf3a95cd4f96d045b788ede6ff0b6d2
-    m_TableEntryReference:
-      m_KeyId: 57086709760
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  m_FormatArguments: []
-  m_UpdateString:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1106021177}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Text, UnityEngine.UI
-        m_MethodName: set_text
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  references:
-    version: 2
-    RefIds: []
 --- !u!1 &1144075107 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7806229355490783713, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
@@ -1767,7 +1713,9 @@ MonoBehaviour:
   playerTransform: {fileID: 1259892447}
   scoreText: {fileID: 587483252}
   highScoreText: {fileID: 1537912250}
+  obstaclePassedText: {fileID: 1896485052}
   score: 0
+  obstacleScore: 0
   gameOver: 0
   playerSprite: {fileID: 1259892446}
   playerScore: {fileID: 587483250}
@@ -1786,6 +1734,15 @@ MonoBehaviour:
       m_TableCollectionName: GUID:3cf3a95cd4f96d045b788ede6ff0b6d2
     m_TableEntryReference:
       m_KeyId: 7358422061056
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localStringObstacleScore:
+    m_TableReference:
+      m_TableCollectionName: GUID:3cf3a95cd4f96d045b788ede6ff0b6d2
+    m_TableEntryReference:
+      m_KeyId: 5478729256144896
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -1957,6 +1914,85 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1896485050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1896485051}
+  - component: {fileID: 1896485053}
+  - component: {fileID: 1896485052}
+  m_Layer: 5
+  m_Name: ObstacleScore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1896485051
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896485050}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 337385393}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.7502672}
+  m_AnchorMax: {x: 0.5, y: 0.7502672}
+  m_AnchoredPosition: {x: -0.000011444, y: -117}
+  m_SizeDelta: {x: 800, y: 111.3753}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1896485052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896485050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: ab94a69df3a53b044b5b95388206cf9d, type: 3}
+    m_FontSize: 70
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 7
+    m_MaxSize: 80
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &1896485053
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896485050}
+  m_CullTransparentMesh: 1
 --- !u!1 &4157953271092906755
 GameObject:
   m_ObjectHideFlags: 0
@@ -6797,25 +6833,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 291018895}
     m_Modifications:
     - target: {fileID: 7098117988343239513, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7098117988343239513, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1207369322}
-    - target: {fileID: 7098117988343239513, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeLocale
-      objectReference: {fileID: 0}
-    - target: {fileID: 7098117988343239513, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: LocaleSelector, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 7265037922542937977, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
-      propertyPath: m_Text
-      value: Change Language
-      objectReference: {fileID: 0}
     - target: {fileID: 7806229355490783713, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
       propertyPath: m_Name
       value: SettingsButton
@@ -6903,10 +6923,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2842413633422509964, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1106021178}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 757b5f9630dcb3446802d48be501a4fd, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

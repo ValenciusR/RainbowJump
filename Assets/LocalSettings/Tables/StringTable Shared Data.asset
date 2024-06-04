@@ -31,6 +31,14 @@ MonoBehaviour:
     m_Key: dynamicHighScore
     m_Metadata:
       m_Items: []
+  - m_Id: 5478729256144896
+    m_Key: dynamicObstacleScore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5480222399008768
+    m_Key: New Entry 1
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -36,10 +36,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 6242672043945623591
+  - m_Id: 5478729256144896
+    m_Localized: 'Passed : {0:plural: {} Obstacle| {0} Obstacles}'
+    m_Metadata:
+      m_Items:
+      - rid: 6242672043945623591
   references:
     version: 2
     RefIds:
     - rid: 6242672043945623591
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00102244b1060000
+        m_Entries: 00102244b10600000010220fe0761300

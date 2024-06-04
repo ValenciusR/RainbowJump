@@ -922,12 +922,12 @@ PlayerSettings:
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 0
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: e793a167-9a89-478b-8455-08327aef2e05
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
+  projectName: LanguageLocalization
   organizationId: valenciusrianto
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
