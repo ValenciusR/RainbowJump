@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 namespace RainbowJump.Scripts
 {
@@ -12,9 +14,52 @@ namespace RainbowJump.Scripts
         public GameObject muteButton;
         public GameObject languageButton;
         public GameObject unMuteButton;
+        public GameObject leaderboardPanel;
+        public GameObject profilePanel;
         public Animator buttonsAnimator;
         public AnimationClip newAnimationClip;
         public int timesClicked = 0;
+
+        public GameObject loginPanel;
+        public GameObject registerPanel;
+
+        public Text nameText;
+
+        [SerializeField]
+        public FirebaseAuthManager firebaseAuthManager;
+
+        public void backButton()
+        {
+            registerPanel.SetActive(false);
+            loginPanel.SetActive(false);
+        }
+
+        public void loginButton()
+        {
+            if(firebaseAuthManager.auth != null && firebaseAuthManager.user != null)
+            {
+                profilePanel.SetActive(true);
+                nameText.text = firebaseAuthManager.user.DisplayName;
+            }
+            else
+            {
+                loginPanel.SetActive(true);
+                registerPanel.SetActive(false);
+            }
+        }
+
+        public void logOutButton()
+        {
+            profilePanel.SetActive(false);
+            loginPanel.SetActive(true);
+        }
+
+        public void registerButton()
+        {
+            loginPanel.SetActive(false);
+            registerPanel.SetActive(true);
+        }
+
         public void SettingsButtonClick()
         {
             timesClicked++;
@@ -52,8 +97,28 @@ namespace RainbowJump.Scripts
             AudioListener.volume = 1f;
         }
 
+        public void BackButtonClick()
+        {
+            leaderboardPanel.SetActive(false);
+            timesClicked++;
+        }
+
+        public void LeaderboardButtonClick()
+        {
+            leaderboardPanel.SetActive(true);
+            buttonsAnimator.Play(newAnimationClip.name);
+            Invoke("DisableButtons", 0.35f);
+
+        }
+
+        public void BackProfile()
+        {
+            profilePanel.SetActive(false);
+        }
+
         void Start()
         {
+            buttons.SetActive(false);
             muted = PlayerPrefs.GetInt("muted", 0) == 1;
             if (muted)
             {

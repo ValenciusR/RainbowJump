@@ -8,6 +8,11 @@ using System.IO;
 using SouthPointe.Serialization.MessagePack;
 using Unity.VisualScripting;
 using MessagePack;
+using Unity.Collections;
+using UnityEngine.SocialPlatforms.Impl;
+using TMPro;
+using Firebase.Database;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 
 namespace RainbowJump.Scripts
@@ -30,6 +35,16 @@ namespace RainbowJump.Scripts
         public float score = 0f;
         public float obstacleScore = 0;
         private float highScore = 0f; // variable to hold the high score
+        private LeaderboardModel leaderboard;
+        private LeaderboardModel myleaderboard;
+
+        public GameObject leaderboardlistprefab;
+        public GameObject leaderboardcontent;
+
+        public GameObject myleaderboardcontent;
+
+        private string userID;
+        private DatabaseReference dbreference;
 
         public bool gameOver = false;
 
@@ -43,6 +58,7 @@ namespace RainbowJump.Scripts
         public GameObject settingsButton;
         public GameObject settingsButtons;
         public SettingsButton settingsButtonScript;
+        public TMP_InputField inputFieldName;
 
         public AudioClip tapSound;
         public AudioClip deathSound;
@@ -54,6 +70,9 @@ namespace RainbowJump.Scripts
 
         [SerializeField] private LocalizedString localStringScore;
         [SerializeField] private LocalizedString localStringObstacleScore;
+
+        [SerializeField]
+        public FirebaseAuthManager firebaseAuthManager;
 
         private void OnEnable()
         {
@@ -83,6 +102,8 @@ namespace RainbowJump.Scripts
         // Start is called before the first frame update
         void Start()
         {
+            userID = SystemInfo.deviceUniqueIdentifier;
+            dbreference = FirebaseDatabase.DefaultInstance.RootReference;
             formatter = new MessagePackFormatter();
             Application.targetFrameRate = 144;
             playerMovement.enabled = false;
@@ -95,17 +116,123 @@ namespace RainbowJump.Scripts
 
             //highScore = 0;
 
+            //read local highscore
             string json = File.ReadAllText(Application.dataPath + "/Data/DataFile.json");
-            DataModel data = JSONSerializeable<DataModel>.CreateFromJSON(json);
+            DataModel data = new DataModel();
+            data = JSONSerializeable<DataModel>.CreateFromJSON(json);
             highScore = data.score;
+            
+            //read leaderboard
+            string jsonleaderboard = File.ReadAllText(Application.dataPath + "/Data/DataFileLeaderBoard.json");
+            LeaderboardModel dataleaderboard = JSONSerializeable<LeaderboardModel>.CreateFromJSON(jsonleaderboard);
+            if(dataleaderboard != null )
+            {
+                leaderboard = new LeaderboardModel();
+                leaderboard = dataleaderboard;
+                leaderboard.objectListDataModel.Sort();
+                ReloadAllData(leaderboard);
+            }
+            else
+            {
+                leaderboard = new LeaderboardModel();
+            }
+
+            //read to myleaderboard
+            if (dataleaderboard != null)
+            {
+                Invoke("ReloadAllDataMyLeaderboard", 2);
+            }
+            else
+            {
+                myleaderboard = new LeaderboardModel();
+            }
+
+            //Ga guna cuma testing messagepack
+            byte[] bytesdata = File.ReadAllBytes(Application.dataPath + "/Data/DataFileMsgPack");
+            DataModel data2 = formatter.Deserialize<DataModel>(bytesdata);
 
             localStringScore.Arguments[0] = highScore.ToString("0");
             localStringScore.RefreshString();
             localStringObstacleScore.Arguments[0] = 0;
             localStringObstacleScore.RefreshString();
-
-           
         }
+
+        public void ReloadAllDataMyLeaderboard()
+        {
+            if (firebaseAuthManager.auth != null && firebaseAuthManager.user != null)
+            {
+                string jsonleaderboard = File.ReadAllText(Application.dataPath + "/Data/DataFileLeaderBoard.json");
+                LeaderboardModel dataleaderboard = JSONSerializeable<LeaderboardModel>.CreateFromJSON(jsonleaderboard);
+                LeaderboardModel leaderboardData2 = new LeaderboardModel();
+                leaderboardData2 = dataleaderboard;
+                myleaderboard = new LeaderboardModel();
+                
+                    foreach (DataModel dataModel in leaderboardData2.objectListDataModel)
+                    {
+
+                        if (firebaseAuthManager.user.UserId == dataModel.uid)
+                        {
+                            myleaderboard.objectListDataModel.Add(dataModel);
+                        }
+                    }
+                
+                myleaderboard.objectListDataModel.Sort();
+                int count = 0;
+                if (myleaderboard != null)
+                {
+                    foreach (DataModel model in myleaderboard.objectListDataModel)
+                    {
+                        count++;
+                        LoadDataMyLeaderboard(model);
+                    }
+                }
+
+                RectTransform rt = myleaderboardcontent.GetComponent(typeof(RectTransform)) as RectTransform;
+                rt.sizeDelta = new Vector2(480, count * 92);
+                rt.transform.localPosition = new Vector3(0, 2000, 0);
+            }
+                
+        }
+
+        private void ReloadAllData(LeaderboardModel data)
+        {
+            string jsonleaderboard = File.ReadAllText(Application.dataPath + "/Data/DataFileLeaderBoard.json");
+            LeaderboardModel dataleaderboard = JSONSerializeable<LeaderboardModel>.CreateFromJSON(jsonleaderboard);
+            leaderboard = dataleaderboard;
+            leaderboard.objectListDataModel.Sort();
+            int count = 0;
+            if (leaderboard != null)
+            {
+                foreach (DataModel model in data.objectListDataModel)
+                {
+                    count++;
+                    LoadData(model);
+                }
+            }
+             
+            RectTransform rt = leaderboardcontent.GetComponent(typeof(RectTransform)) as RectTransform;
+            rt.sizeDelta = new Vector2(480, count * 92);
+            rt.transform.localPosition = new Vector3(0, 0, 0);
+        }
+
+        private void LoadDataMyLeaderboard(DataModel model)
+        {
+            GameObject objectList = Instantiate<GameObject>(leaderboardlistprefab);
+            DataModel data = model;
+
+            objectList.transform.SetParent(myleaderboardcontent.transform, false);
+            objectList.GetComponent<Text>().text = model.name + " - " + model.score;
+        }
+
+        private void LoadData(DataModel model)
+        {
+            GameObject objectList = Instantiate<GameObject>(leaderboardlistprefab);
+            DataModel data = model;
+
+            objectList.transform.SetParent(leaderboardcontent.transform, false);
+            objectList.GetComponent<Text>().text = model.name + " - " + model.score;
+        }
+
 
         // Update is called once per frame
         void Update()
@@ -125,21 +252,17 @@ namespace RainbowJump.Scripts
                 // Save the high score if it's greater than the current high score
                 if (score > highScore)
                 {
-                    DataModel data = new DataModel();
-                    data.score = score;
-                    data.day = DateTime.Now.Day;
-                    data.month = DateTime.Now.Month;
-                    data.year = DateTime.Now.Year;
-                    data.obstclepassed = obstacleScore;
+                    DataModel data = new DataModel(inputFieldName.text.ToString(), firebaseAuthManager.GetUserID().ToString(), score, obstacleScore, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
 
                     string json = data.CreateToJSON();
                     File.WriteAllText(Application.dataPath + "/Data/DataFile.json", json);
                     Debug.Log(json);
 
+                    
                     byte[] bytes = new MessagePackFormatter().Serialize(data);
-                    string jsonMSGPACK = formatter.AsJson(bytes);
-                    File.WriteAllText(Application.dataPath + "/Data/DataFileMsgPack.json", jsonMSGPACK);
-                    Debug.Log(jsonMSGPACK);
+                    
+                    File.WriteAllBytes(Application.dataPath + "/Data/DataFileMsgPack", bytes);
+                    
 
                     highScore = score;
                     PlayerPrefs.SetFloat("HighScore", highScore);
@@ -164,7 +287,6 @@ namespace RainbowJump.Scripts
                 if (isAboveofDot)
                 {
                     obstaclesPos.RemoveAt(i);
-                    Debug.Log("yay");
                     obstacleScore++;
                 }
               
@@ -190,8 +312,18 @@ namespace RainbowJump.Scripts
             playerMovement.enabled = true;
         }
 
+        public void AddButton()
+        {
+            AddDataLeaderboard();
+            SaveLeaderboardtoDB();
+            RestartGame();
+        }
+
         public void RestartGame()
         {
+            DestroyChild();
+            ReloadAllData(leaderboard);
+            ReloadAllDataMyLeaderboard();
             obstaclesPos.Clear();
 
             settingsButton.SetActive(true);
@@ -210,6 +342,43 @@ namespace RainbowJump.Scripts
             obstacleScore = 0f;
 
             playerTrail.Clear();
+            inputFieldName.text = "";
+        }
+
+        private void AddDataLeaderboard()
+        {
+            DataModel data = new DataModel(inputFieldName.text.ToString(), firebaseAuthManager.GetUserID().ToString(), score, obstacleScore, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+            leaderboard.objectListDataModel.Add(data);
+            leaderboard.objectListDataModel.Sort();
+            string jsonleaderboard = leaderboard.CreateToJSON();
+            File.WriteAllText(Application.dataPath + "/Data/DataFileLeaderBoard.json", jsonleaderboard);
+        }
+
+        public void SaveLeaderboardtoDB()
+        {
+            string jsonleaderboard = leaderboard.CreateToJSON();
+            dbreference.Child("leaderboard").SetRawJsonValueAsync(jsonleaderboard);
+        }
+
+        public void DestroyChild()
+        {
+            foreach(Transform child in leaderboardcontent.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            foreach (Transform child in myleaderboardcontent.transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        public void DestroyChildLB()
+        {
+            foreach (Transform child in myleaderboardcontent.transform)
+            {
+                Destroy(child.gameObject);
+            }
         }
 
         public void PlayTapSound()

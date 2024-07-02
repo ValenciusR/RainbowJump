@@ -36,7 +36,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5480222399008768
-    m_Key: New Entry 1
+    m_Key: leaderboardKey
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18855197050802176
+    m_Key: welcomeKey
     m_Metadata:
       m_Items: []
   m_Metadata:

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "198202739770",
+    "firebase_url": "https://rainbowjump-c34bc-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "rainbowjump-c34bc",
+    "storage_bucket": "rainbowjump-c34bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:198202739770:android:a347293f4b94ce75e9b903",
+        "android_client_info": {
+          "package_name": "com.VR.RainbowJump"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "198202739770-1kqbgabahq29u514aqb7ni7a8shefqcs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUw6OQn-9sJPpV85xR8skIqDe80PYgkxs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "198202739770-1kqbgabahq29u514aqb7ni7a8shefqcs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

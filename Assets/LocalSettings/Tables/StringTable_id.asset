@@ -41,6 +41,14 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 6242672043945623593
+  - m_Id: 5480222399008768
+    m_Localized: LEADERBOARD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18855197050802176
+    m_Localized: Halo,
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
